@@ -1,0 +1,16 @@
+logging:
+  level:
+    root: INFO
+    com.militariaapp.backend: DEBUG
+
+server:
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: MilitariaBackend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/militariamarket?stringtype=unspecified
+    username: stawn
+    password:
+    driverClassName: org.postgresql.Driver
