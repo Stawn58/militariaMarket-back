@@ -6,9 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SellerSummaryView {
-
-    private String lastName;
-    private String firstName;
-    private String email;
+    private String companyName;
     private String phoneNumber;
 }

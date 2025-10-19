@@ -1,11 +1,11 @@
-package com.militiariaapp.backend.user.model.view;
+package com.militiariaapp.backend.appuser.model.view;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserSummaryView {
+public class AppUserSummaryView {
     private String firstName;
     private String lastName;
     private String email;

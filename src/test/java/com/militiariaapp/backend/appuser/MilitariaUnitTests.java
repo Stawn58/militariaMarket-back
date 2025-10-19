@@ -1,4 +1,4 @@
-package com.militiariaapp.backend.user;
+package com.militiariaapp.backend.appuser;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;

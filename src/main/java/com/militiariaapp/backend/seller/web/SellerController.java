@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -14,15 +16,17 @@ public class SellerController {
 
     private final SellerService sellerService;
 
-    @GetMapping()
-    public String getSellers() {
-        return "Hello Sellers";
+    @GetMapping("{id}")
+    public ResponseEntity<SellerSummaryView> getSellers(@PathVariable UUID id) {
+        var sellerSummary = sellerService.getSellerById(id);
+
+        return ResponseEntity.ok(sellerSummary);
     }
 
     @PostMapping()
     public ResponseEntity<Void> saveSeller(@RequestBody SellerSummaryView sellerSummaryView) {
         sellerService.saveSeller(sellerSummaryView);
-        
+
         return ResponseEntity.ok().build();
     }
 }

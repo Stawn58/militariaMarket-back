@@ -1,8 +1,7 @@
 package com.militiariaapp.backend.seller.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.militiariaapp.backend.appuser.model.AppUser;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +14,11 @@ public class Seller {
 
     @Id
     private UUID id = UUID.randomUUID();
-    private String lastName;
-    private String firstName;
-    private String email;
+    @Column(name = "company_name")
+    private String companyName;
+    @Column(name = "phone_number")
     private String phoneNumber;
+    @OneToOne
+    @JoinColumn(name = "app_user_id")
+    private AppUser appUser;
 }

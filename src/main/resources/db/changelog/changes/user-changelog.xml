@@ -4,14 +4,14 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="13102025-1" author="Stawn">
-        <createTable tableName="user">
+        <createTable tableName="app_user">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="firstName" type="VARCHAR(100)">
+            <column name="first_name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="lastName" type="VARCHAR(100)">
+            <column name="last_name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="VARCHAR(150)">
@@ -25,20 +25,20 @@
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="streetName" type="VARCHAR(200)">
+            <column name="street_name" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
             <column name="city" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="postalCode" type="VARCHAR(20)">
+            <column name="postal_code" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
             <column name="country" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="UUID">
-                <constraints nullable="false" unique="true" foreignKeyName="fk_address_user" references="user(id)"/>
+            <column name="app_user_id" type="UUID">
+                <constraints nullable="false" unique="true" foreignKeyName="fk_address_user" references="app_user(id)"/>
             </column>
         </createTable>
     </changeSet>
@@ -48,14 +48,15 @@
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="companyName" type="VARCHAR(150)">
+            <column name="company_name" type="VARCHAR(150)">
                 <constraints nullable="false"/>
             </column>
-            <column name="phoneNumber" type="VARCHAR(20)">
+            <column name="phone_number" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="UUID">
-                <constraints nullable="false" unique="true" foreignKeyName="fk_seller_user" references="user(id)"/>
+            <column name="app_user_id" type="UUID">
+                <constraints nullable="false" unique="true" foreignKeyName="fk_seller_app_user"
+                             references="app_user(id)"/>
             </column>
         </createTable>
     </changeSet>

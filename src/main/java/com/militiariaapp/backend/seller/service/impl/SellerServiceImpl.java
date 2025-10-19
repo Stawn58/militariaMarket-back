@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class SellerServiceImpl implements SellerService {
@@ -19,5 +21,13 @@ public class SellerServiceImpl implements SellerService {
         var sellerEntity = mapper.toEntity(sellerSummaryView);
 
         repository.save(sellerEntity);
+    }
+
+    @Override
+    public SellerSummaryView getSellerById(UUID id) {
+        var mapper = Mappers.getMapper(SellerMapper.class);
+        var sellerEntity = repository.findById(id).orElse(null);
+
+        return mapper.toSummaryView(sellerEntity);
     }
 }
