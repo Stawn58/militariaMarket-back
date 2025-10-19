@@ -1,0 +1,7 @@
+databaseChangeLog:
+  # include the regular (main) master changelog so tests run the same base changes
+  - include:
+      file: classpath:db/changelog/db.changelog-master.yaml
+  # include all test-specific changes (kept as-is)
+  - includeAll:
+      path: db/changelog/test-changes/

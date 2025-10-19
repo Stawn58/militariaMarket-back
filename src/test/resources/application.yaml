@@ -1,0 +1,8 @@
+spring:
+  config:
+    import: "optional:configserver:"
+  flyway:
+    enabled: false
+  liquibase:
+    contexts: test
+    change-log: classpath:db/changelog/db.test-changelog-master.yaml

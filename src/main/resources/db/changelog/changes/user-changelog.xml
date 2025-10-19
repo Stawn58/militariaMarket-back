@@ -48,7 +48,7 @@
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="companyName" type="DECIMAL(3,2)">
+            <column name="companyName" type="VARCHAR(150)">
                 <constraints nullable="false"/>
             </column>
             <column name="phoneNumber" type="VARCHAR(20)">

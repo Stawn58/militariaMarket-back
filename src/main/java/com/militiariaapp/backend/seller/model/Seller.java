@@ -14,8 +14,7 @@ import java.util.UUID;
 public class Seller {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     private String lastName;
     private String firstName;
     private String email;
