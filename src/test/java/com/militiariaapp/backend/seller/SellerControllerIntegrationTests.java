@@ -27,6 +27,16 @@ public class SellerControllerIntegrationTests extends MilitariaIntegrationTests 
     }
 
     @Test
+    void getSeller_notFound_returnsOkWithNullBody() throws Exception {
+        var id = UUID.randomUUID(); // Non-existent ID
+        var uriTemplate = "/sellers/" + id;
+
+        mvc.perform(MockMvcRequestBuilders.get(uriTemplate))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void saveSeller_shouldReturnOk() throws Exception {
         String sellerJson = """
                 {

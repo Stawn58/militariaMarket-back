@@ -58,4 +58,60 @@ class AppAppAppUserServiceImplUnitTest extends MilitariaUnitTests {
         assertThrows(NullPointerException.class, () -> service.saveUser(null));
     }
 
+    @Test
+    void saveUser_withEmptyFields_savesSuccessfully() {
+        var view = new AppUserSummaryView();
+        view.setFirstName("");
+        view.setLastName("");
+        view.setEmail("");
+
+        var generatedId = UUID.randomUUID();
+
+        when(repository.save(any(AppUser.class))).thenAnswer(invocation -> {
+            AppUser u = invocation.getArgument(0);
+            u.setId(generatedId);
+            return u;
+        });
+
+        UUID result = service.saveUser(view);
+
+        assertNotNull(result);
+        assertEquals(generatedId, result);
+
+        var captor = ArgumentCaptor.forClass(AppUser.class);
+        verify(repository, times(1)).save(captor.capture());
+        AppUser saved = captor.getValue();
+        assertEquals("", saved.getFirstName());
+        assertEquals("", saved.getLastName());
+        assertEquals("", saved.getEmail());
+    }
+
+    @Test
+    void saveUser_withSpecialCharacters_savesSuccessfully() {
+        var view = new AppUserSummaryView();
+        view.setFirstName("José");
+        view.setLastName("O'Brien");
+        view.setEmail("josé.o'brien@test.com");
+
+        var generatedId = UUID.randomUUID();
+
+        when(repository.save(any(AppUser.class))).thenAnswer(invocation -> {
+            AppUser u = invocation.getArgument(0);
+            u.setId(generatedId);
+            return u;
+        });
+
+        UUID result = service.saveUser(view);
+
+        assertNotNull(result);
+        assertEquals(generatedId, result);
+
+        var captor = ArgumentCaptor.forClass(AppUser.class);
+        verify(repository, times(1)).save(captor.capture());
+        AppUser saved = captor.getValue();
+        assertEquals("José", saved.getFirstName());
+        assertEquals("O'Brien", saved.getLastName());
+        assertEquals("josé.o'brien@test.com", saved.getEmail());
+    }
+
 }
