@@ -4,6 +4,7 @@ import com.militiariaapp.backend.seller.mapper.SellerMapper;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import com.militiariaapp.backend.seller.service.SellerService;
 import com.militiariaapp.backend.seller.service.repository.SellerRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class SellerServiceImpl implements SellerService {
     private final SellerRepository repository;
 
     @Override
+    @Transactional
     public void saveSeller(SellerSummaryView sellerSummaryView) {
         var mapper = Mappers.getMapper(SellerMapper.class);
         var sellerEntity = mapper.toEntity(sellerSummaryView);

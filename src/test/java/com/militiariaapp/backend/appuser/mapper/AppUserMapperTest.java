@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AppUserMapperTest extends MilitariaUnitTests {
 
-    private UserMapper mapper;
+    private AppUserMapper mapper;
 
     @BeforeEach
     void setUp() {
-        mapper = Mappers.getMapper(UserMapper.class);
+        mapper = Mappers.getMapper(AppUserMapper.class);
     }
 
     @Test

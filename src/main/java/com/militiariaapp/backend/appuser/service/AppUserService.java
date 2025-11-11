@@ -4,6 +4,6 @@ import com.militiariaapp.backend.appuser.model.view.AppUserSummaryView;
 
 import java.util.UUID;
 
-public interface UserService {
+public interface AppUserService {
     UUID saveUser(AppUserSummaryView user);
 }

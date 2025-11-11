@@ -3,7 +3,7 @@ package com.militiariaapp.backend.appuser.service.impl;
 import com.militiariaapp.backend.appuser.MilitariaUnitTests;
 import com.militiariaapp.backend.appuser.model.AppUser;
 import com.militiariaapp.backend.appuser.model.view.AppUserSummaryView;
-import com.militiariaapp.backend.appuser.service.UserRepository;
+import com.militiariaapp.backend.appuser.service.AppUserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class AppUserServiceImplUnitTest extends MilitariaUnitTests {
+class AppAppAppUserServiceImplUnitTest extends MilitariaUnitTests {
 
     @Mock
-    private UserRepository repository;
+    private AppUserRepository repository;
 
     @InjectMocks
-    private UserServiceImpl service;
+    private AppUserServiceImpl service;
 
     @Test
     void saveUser_happyPath_savesAndReturnsId() {

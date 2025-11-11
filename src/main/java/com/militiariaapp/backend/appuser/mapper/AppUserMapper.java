@@ -6,10 +6,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper
-public interface UserMapper {
+public interface AppUserMapper {
 
     AppUserSummaryView toSummaryView(AppUser appUser);
 
     @Mapping(target = "id", ignore = true)
     AppUser toEntity(AppUserSummaryView appUserSummaryView);
+
 }
