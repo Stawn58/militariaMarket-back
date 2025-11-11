@@ -1,0 +1,48 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="11112025" author="Stawn">
+        <createTable tableName="gallery">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(5000)"/>
+            <column name="seller_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_gallery_seller" references="seller(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="product">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(5000)"/>
+            <column name="price" type="decimal(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gallery_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_product_gallery" references="gallery(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="product_image">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="image_url" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_product_image_product" references="product(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

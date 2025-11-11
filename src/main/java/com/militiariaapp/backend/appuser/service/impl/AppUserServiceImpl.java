@@ -1,6 +1,7 @@
 package com.militiariaapp.backend.appuser.service.impl;
 
 import com.militiariaapp.backend.appuser.mapper.AppUserMapper;
+import com.militiariaapp.backend.appuser.model.view.AppUserCreationView;
 import com.militiariaapp.backend.appuser.model.view.AppUserSummaryView;
 import com.militiariaapp.backend.appuser.service.AppUserRepository;
 import com.militiariaapp.backend.appuser.service.AppUserService;
@@ -20,6 +21,11 @@ public class AppUserServiceImpl implements AppUserService {
     public UUID saveUser(AppUserSummaryView user) {
         var mapper = Mappers.getMapper(AppUserMapper.class);
         return repository.save(mapper.toEntity(user)).getId();
+    }
 
+    @Override
+    public UUID saveUserFromCreationView(AppUserCreationView creationView) {
+        var mapper = Mappers.getMapper(AppUserMapper.class);
+        return repository.save(mapper.toEntityFromCreationView(creationView)).getId();
     }
 }
