@@ -1,4 +1,4 @@
-package com.militiariaapp.backend.appuser;
+package com.militiariaapp.backend;
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import jakarta.transaction.Transactional;

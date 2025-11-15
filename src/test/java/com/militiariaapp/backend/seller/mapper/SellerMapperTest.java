@@ -1,6 +1,6 @@
 package com.militiariaapp.backend.seller.mapper;
 
-import com.militiariaapp.backend.appuser.MilitariaUnitTests;
+import com.militiariaapp.backend.MilitariaUnitTests;
 import com.militiariaapp.backend.seller.model.Seller;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.militiariaapp.backend.appuser.service.impl;
 
-import com.militiariaapp.backend.appuser.MilitariaUnitTests;
+import com.militiariaapp.backend.MilitariaUnitTests;
 import com.militiariaapp.backend.appuser.model.AppUser;
 import com.militiariaapp.backend.appuser.model.view.AppUserSummaryView;
 import com.militiariaapp.backend.appuser.service.AppUserRepository;

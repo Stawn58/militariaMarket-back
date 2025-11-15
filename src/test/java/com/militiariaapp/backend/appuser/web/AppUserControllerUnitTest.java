@@ -1,6 +1,6 @@
 package com.militiariaapp.backend.appuser.web;
 
-import com.militiariaapp.backend.appuser.MilitariaUnitTests;
+import com.militiariaapp.backend.MilitariaUnitTests;
 import com.militiariaapp.backend.appuser.model.view.AppUserCreationView;
 import com.militiariaapp.backend.appuser.service.AppUserService;
 import org.junit.jupiter.api.Test;

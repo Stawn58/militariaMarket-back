@@ -22,4 +22,27 @@
         </insert>
     </changeSet>
 
+    <changeSet id="20102025-test-1" author="testing-man" context="test">
+        <insert tableName="gallery">
+            <column name="id" value="a1b2c3d4-e5f6-4789-abcd-ef0123456789"/>
+            <column name="name" value="Test Gallery"/>
+            <column name="description" value="A gallery for testing purposes."/>
+            <column name="seller_id" value="91e10690-867d-4bac-88ad-2ccac2f26392"/>
+        </insert>
+
+        <insert tableName="product">
+            <column name="id" value="b1c2d3e4-f567-4890-abcd-ef0123456789"/>
+            <column name="name" value="Test Product 1"/>
+            <column name="description" value="First test product."/>
+            <column name="price" value="19.99"/>
+            <column name="gallery_id" value="a1b2c3d4-e5f6-4789-abcd-ef0123456789"/>
+        </insert>
+
+        <insert tableName="product_image">
+            <column name="id" value="c1d2e3f4-5678-4901-abcd-ef0123456789"/>
+            <column name="image_url" value="http://example.com/image1.jpg"/>
+            <column name="product_id" value="b1c2d3e4-f567-4890-abcd-ef0123456789"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
