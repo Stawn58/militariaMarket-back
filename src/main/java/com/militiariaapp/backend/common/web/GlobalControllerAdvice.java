@@ -15,5 +15,10 @@ public class GlobalControllerAdvice {
         log.info("Resource not found: {}", ex.getMessage());
         return ResponseEntity.notFound().build();
     }
-}
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        log.info("Bad request: {}", ex.getMessage());
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+}

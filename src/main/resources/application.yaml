@@ -14,3 +14,4 @@ spring:
     username: stawn
     password:
     driverClassName: org.postgresql.Driver
+  cloudinary-url: ${CLOUDINARY_URL}

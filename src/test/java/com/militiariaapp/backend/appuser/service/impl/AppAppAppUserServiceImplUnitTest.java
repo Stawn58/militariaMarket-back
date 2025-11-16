@@ -24,7 +24,7 @@ class AppAppAppUserServiceImplUnitTest extends MilitariaUnitTests {
     private AppUserServiceImpl service;
 
     @Test
-    void saveUser_happyPath_savesAndReturnsId() {
+    void saveUser_ShouldSaveAndReturnIdWhenViewIsValid() {
         var view = new AppUserSummaryView();
         view.setFirstName("John");
         view.setLastName("Doe");
@@ -52,14 +52,12 @@ class AppAppAppUserServiceImplUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveUser_null_throwsNullPointerException() {
-        // mapstruct will return null for a null input; repository.save(null) mocked returns null
-        // service then calls .getId() on the returned saved entity which will trigger NPE
+    void saveUser_ShouldThrowNullPointerExceptionWhenViewIsNull() {
         assertThrows(NullPointerException.class, () -> service.saveUser(null));
     }
 
     @Test
-    void saveUser_withEmptyFields_savesSuccessfully() {
+    void saveUser_ShouldSaveSuccessfullyWhenFieldsAreEmpty() {
         var view = new AppUserSummaryView();
         view.setFirstName("");
         view.setLastName("");
@@ -87,11 +85,11 @@ class AppAppAppUserServiceImplUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveUser_withSpecialCharacters_savesSuccessfully() {
+    void saveUser_ShouldSaveSuccessfullyWhenFieldsHaveSpecialCharacters() {
         var view = new AppUserSummaryView();
-        view.setFirstName("José");
+        view.setFirstName("Jos\u00e9");
         view.setLastName("O'Brien");
-        view.setEmail("josé.o'brien@test.com");
+        view.setEmail("jos\u00e9.o'brien@test.com");
 
         var generatedId = UUID.randomUUID();
 
@@ -109,9 +107,9 @@ class AppAppAppUserServiceImplUnitTest extends MilitariaUnitTests {
         var captor = ArgumentCaptor.forClass(AppUser.class);
         verify(repository, times(1)).save(captor.capture());
         AppUser saved = captor.getValue();
-        assertEquals("José", saved.getFirstName());
+        assertEquals("Jos\u00e9", saved.getFirstName());
         assertEquals("O'Brien", saved.getLastName());
-        assertEquals("josé.o'brien@test.com", saved.getEmail());
+        assertEquals("jos\u00e9.o'brien@test.com", saved.getEmail());
     }
 
 }

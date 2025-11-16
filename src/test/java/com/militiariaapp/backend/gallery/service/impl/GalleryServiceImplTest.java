@@ -5,6 +5,8 @@ import com.militiariaapp.backend.gallery.model.Gallery;
 import com.militiariaapp.backend.gallery.model.view.GalleryCreationView;
 import com.militiariaapp.backend.gallery.model.view.GallerySummaryView;
 import com.militiariaapp.backend.gallery.service.repository.GalleryRepository;
+import com.militiariaapp.backend.seller.model.Seller;
+import com.militiariaapp.backend.seller.service.repository.SellerRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -21,16 +23,24 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
 
     @Mock
     private GalleryRepository repository;
+    @Mock
+    private SellerRepository sellerRepository;
 
     @InjectMocks
     private GalleryServiceImpl service;
 
     @Test
-    void saveGallery_happyPath_savesGallery() {
+    void saveGallery_ShouldSaveGalleryWhenViewIsValid() {
+        var sellerId = UUID.randomUUID();
+        var seller = new Seller();
+        seller.setId(sellerId);
+
         var view = new GalleryCreationView();
+        view.setSellerId(sellerId);
         view.setName("Test Gallery");
         view.setDescription("A description");
 
+        when(sellerRepository.findById(sellerId)).thenReturn(Optional.of(seller));
         when(repository.save(any(Gallery.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         service.saveGallery(view);
@@ -40,17 +50,26 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
         Gallery saved = captor.getValue();
         assertEquals("Test Gallery", saved.getName());
         assertEquals("A description", saved.getDescription());
+        assertEquals(seller, saved.getSeller());
     }
 
     @Test
-    void saveGallery_nullView_throwsNpe_andDoesNotCallRepository() {
-        assertThrows(NullPointerException.class, () -> service.saveGallery(null));
+    void saveGallery_ShouldThrowIllegalArgumentExceptionWhenSellerNotFound() {
+        var sellerId = UUID.randomUUID();
+        var view = new GalleryCreationView();
+        view.setSellerId(sellerId);
+        view.setName("Test Gallery");
+
+        when(sellerRepository.findById(sellerId)).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.saveGallery(view));
+        assertTrue(ex.getMessage().contains("Seller not found"));
 
         verify(repository, never()).save(any());
     }
 
     @Test
-    void getGallery_galleryExists_returnsSummaryView() {
+    void getGallery_ShouldReturnSummaryViewWhenGalleryExists() {
         var id = UUID.randomUUID();
         var gallery = new Gallery();
         gallery.setName("Existing Gallery");
@@ -68,7 +87,7 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     }
 
     @Test
-    void getGallery_galleryNotFound_returnsNull() {
+    void getGallery_ShouldReturnNullWhenGalleryNotFound() {
         var id = UUID.randomUUID();
 
         when(repository.findById(id)).thenReturn(Optional.empty());
@@ -80,11 +99,17 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveGallery_withEmptyStrings_savesEmptyStrings() {
+    void saveGallery_ShouldSaveEmptyStringsWhenFieldsAreEmpty() {
+        var sellerId = UUID.randomUUID();
+        var seller = new com.militiariaapp.backend.seller.model.Seller();
+        seller.setId(sellerId);
+
         var view = new GalleryCreationView();
+        view.setSellerId(sellerId);
         view.setName("");
         view.setDescription("");
 
+        when(sellerRepository.findById(sellerId)).thenReturn(Optional.of(seller));
         when(repository.save(any(Gallery.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         service.saveGallery(view);
@@ -98,9 +123,15 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveGallery_withNullFields_savesNulls() {
-        var view = new GalleryCreationView();
+    void saveGallery_ShouldSaveNullsWhenFieldsAreNull() {
+        var sellerId = UUID.randomUUID();
+        var seller = new com.militiariaapp.backend.seller.model.Seller();
+        seller.setId(sellerId);
 
+        var view = new GalleryCreationView();
+        view.setSellerId(sellerId);
+
+        when(sellerRepository.findById(sellerId)).thenReturn(Optional.of(seller));
         when(repository.save(any(Gallery.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         service.saveGallery(view);
@@ -114,14 +145,20 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveGallery_withVeryLongStrings_preservesLength() {
+    void saveGallery_ShouldPreserveLengthWhenStringsAreVeryLong() {
+        var sellerId = UUID.randomUUID();
+        var seller = new com.militiariaapp.backend.seller.model.Seller();
+        seller.setId(sellerId);
+
         var longName = "x".repeat(5000);
         var longDesc = "d".repeat(8000);
 
         var view = new GalleryCreationView();
+        view.setSellerId(sellerId);
         view.setName(longName);
         view.setDescription(longDesc);
 
+        when(sellerRepository.findById(sellerId)).thenReturn(Optional.of(seller));
         when(repository.save(any(Gallery.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         service.saveGallery(view);
@@ -134,10 +171,16 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveGallery_repositoryThrows_propagatesException() {
+    void saveGallery_ShouldPropagateExceptionWhenRepositoryThrows() {
+        var sellerId = UUID.randomUUID();
+        var seller = new com.militiariaapp.backend.seller.model.Seller();
+        seller.setId(sellerId);
+
         var view = new GalleryCreationView();
+        view.setSellerId(sellerId);
         view.setName("Will Throw");
 
+        when(sellerRepository.findById(sellerId)).thenReturn(Optional.of(seller));
         when(repository.save(any(Gallery.class))).thenThrow(new RuntimeException("db down"));
 
         RuntimeException ex = assertThrows(RuntimeException.class, () -> service.saveGallery(view));
@@ -146,7 +189,7 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     }
 
     @Test
-    void getGallery_whenGalleryHasNullFields_returnsViewWithNulls() {
+    void getGallery_ShouldReturnViewWithNullsWhenGalleryHasNullFields() {
         var id = UUID.randomUUID();
         var gallery = new Gallery();
         gallery.setId(id);

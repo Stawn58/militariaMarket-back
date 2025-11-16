@@ -23,7 +23,7 @@ class AppUserControllerUnitTest extends MilitariaUnitTests {
     private AppUserController controller;
 
     @Test
-    void createAppUser_withValidInput_returnsOkWithUUID() {
+    void createAppUser_ShouldReturnOkWithUUIDWhenInputIsValid() {
         UUID expectedId = UUID.randomUUID();
         AppUserCreationView request = new AppUserCreationView();
         request.setFirstName("John");
@@ -39,7 +39,7 @@ class AppUserControllerUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void createAppUser_withMinimalInput_returnsOkWithUUID() {
+    void createAppUser_ShouldReturnOkWithUUIDWhenInputIsMinimal() {
         UUID expectedId = UUID.randomUUID();
         AppUserCreationView request = new AppUserCreationView();
         request.setFirstName("Jane");
@@ -56,7 +56,7 @@ class AppUserControllerUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void createAppUser_whenServiceThrowsException_exceptionPropagates() {
+    void createAppUser_ShouldPropagateExceptionWhenServiceThrows() {
         AppUserCreationView request = new AppUserCreationView();
         request.setFirstName("Test");
         request.setLastName("User");
@@ -69,7 +69,7 @@ class AppUserControllerUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void createAppUser_returnsResponseEntityWithCorrectStatus() {
+    void createAppUser_ShouldReturnCorrectStatusWhenRequestSucceeds() {
         UUID id = UUID.randomUUID();
         AppUserCreationView request = new AppUserCreationView();
         request.setFirstName("Bob");

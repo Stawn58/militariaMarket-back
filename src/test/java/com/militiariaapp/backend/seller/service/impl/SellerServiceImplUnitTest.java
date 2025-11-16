@@ -25,7 +25,7 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
     private SellerServiceImpl service;
 
     @Test
-    void saveSeller_happyPath_savesSeller() {
+    void saveSeller_ShouldSaveSellerWhenViewIsValid() {
         var view = new SellerSummaryView();
         view.setCompanyName("Test Company");
         view.setPhoneNumber("1234567890");
@@ -42,8 +42,7 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveSeller_nullView_savesNull() {
-        // When null is passed, mapper returns null and repository.save is called with null
+    void saveSeller_ShouldCallRepositoryWithNullWhenViewIsNull() {
         when(repository.save(null)).thenReturn(null);
 
         service.saveSeller(null);
@@ -52,7 +51,7 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void getSellerById_sellerExists_returnsSummaryView() {
+    void getSellerById_ShouldReturnSummaryViewWhenSellerExists() {
         var id = UUID.randomUUID();
         var seller = new Seller();
         seller.setId(id);
@@ -70,7 +69,7 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void getSellerById_sellerNotFound_returnsNull() {
+    void getSellerById_ShouldReturnNullWhenSellerNotFound() {
         var id = UUID.randomUUID();
 
         when(repository.findById(id)).thenReturn(Optional.empty());

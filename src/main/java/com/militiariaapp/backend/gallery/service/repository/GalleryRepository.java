@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.UUID;
 
 public interface GalleryRepository extends CrudRepository<Gallery, UUID> {
+
+    Gallery findBySellerId(UUID sellerId);
 }

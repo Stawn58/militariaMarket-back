@@ -24,7 +24,7 @@ class SellerControllerUnitTest extends MilitariaUnitTests {
     private SellerController controller;
 
     @Test
-    void getSellers_sellerExists_returnsOk() {
+    void getSellers_ShouldReturnOkWhenSellerExists() {
         UUID id = UUID.randomUUID();
         SellerSummaryView view = new SellerSummaryView();
         view.setCompanyName("Test Company");
@@ -42,7 +42,7 @@ class SellerControllerUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void getSellers_sellerNotFound_returnsNullBody() {
+    void getSellers_ShouldReturnNullBodyWhenSellerNotFound() {
         UUID id = UUID.randomUUID();
 
         when(sellerService.getSellerById(any(UUID.class))).thenReturn(null);
@@ -55,7 +55,7 @@ class SellerControllerUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void saveSeller_validInput_returnsOk() {
+    void saveSeller_ShouldReturnOkWhenInputIsValid() {
         SellerSummaryView view = new SellerSummaryView();
         view.setCompanyName("New Company");
         view.setPhoneNumber("5555555555");

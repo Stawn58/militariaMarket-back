@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests {
 
     @Test
-    void createAppUser_withValidRequest_shouldReturnOkWithUUID() throws Exception {
+    void createAppUser_ShouldReturnOkWithUUIDWhenRequestIsValid() throws Exception {
         String json = "{\"firstName\":\"John\",\"lastName\":\"Doe\",\"email\":\"john@example.com\"}";
 
         mvc.perform(MockMvcRequestBuilders.post("/app-users")
@@ -26,7 +26,7 @@ public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests
     }
 
     @Test
-    void createAppUser_withValidData_shouldReturnOk() throws Exception {
+    void createAppUser_ShouldReturnOkWhenDataIsValid() throws Exception {
         String json = "{\"firstName\":\"Jane\",\"lastName\":\"Smith\",\"email\":\"jane.smith@test.com\"}";
 
         mvc.perform(MockMvcRequestBuilders.post("/app-users")
@@ -37,7 +37,7 @@ public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests
     }
 
     @Test
-    void createAppUser_withoutRequestBody_shouldReturnBadRequest() throws Exception {
+    void createAppUser_ShouldReturnBadRequestWhenRequestBodyMissing() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/app-users")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
@@ -45,7 +45,7 @@ public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests
     }
 
     @Test
-    void createAppUser_withEmptyJSON_shouldReturnOkWithDefaults() throws Exception {
+    void createAppUser_ShouldReturnOkWithDefaultsWhenJSONIsEmpty() throws Exception {
         String json = "{}";
 
         mvc.perform(MockMvcRequestBuilders.post("/app-users")
@@ -57,7 +57,7 @@ public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests
     }
 
     @Test
-    void createAppUser_withInvalidJSON_shouldReturnBadRequest() throws Exception {
+    void createAppUser_ShouldReturnBadRequestWhenJSONIsInvalid() throws Exception {
         String json = "{invalid json";
 
         mvc.perform(MockMvcRequestBuilders.post("/app-users")
@@ -68,7 +68,7 @@ public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests
     }
 
     @Test
-    void createAppUser_multipleRequests_shouldReturnDifferentUUIDs() throws Exception {
+    void createAppUser_ShouldReturnDifferentUUIDsWhenMultipleRequests() throws Exception {
         String json1 = "{\"firstName\":\"User1\",\"lastName\":\"One\",\"email\":\"user1@example.com\"}";
         String json2 = "{\"firstName\":\"User2\",\"lastName\":\"Two\",\"email\":\"user2@example.com\"}";
 
@@ -88,7 +88,6 @@ public class AppUserControllerIntegrationTests extends MilitariaIntegrationTests
                 .getResponse()
                 .getContentAsString();
 
-        // Verify UUIDs are different
         assert !uuid1.equals(uuid2) : "Generated UUIDs should be different";
     }
 }

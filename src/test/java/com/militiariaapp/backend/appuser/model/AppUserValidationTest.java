@@ -24,7 +24,7 @@ class AppUserValidationTest extends MilitariaUnitTests {
     }
 
     @Test
-    void validEmail_passesValidation() {
+    void validateEmail_ShouldPassWhenEmailIsValid() {
         AppUser user = new AppUser();
         user.setFirstName("John");
         user.setLastName("Doe");
@@ -36,7 +36,7 @@ class AppUserValidationTest extends MilitariaUnitTests {
     }
 
     @Test
-    void invalidEmail_failsValidation() {
+    void validateEmail_ShouldFailWhenEmailIsInvalid() {
         AppUser user = new AppUser();
         user.setFirstName("John");
         user.setLastName("Doe");
@@ -50,8 +50,7 @@ class AppUserValidationTest extends MilitariaUnitTests {
     }
 
     @Test
-    void emptyEmail_passesValidation() {
-        // @Email annotation allows empty/null values by default
+    void validateEmail_ShouldPassWhenEmailIsEmpty() {
         AppUser user = new AppUser();
         user.setFirstName("John");
         user.setLastName("Doe");
@@ -63,8 +62,7 @@ class AppUserValidationTest extends MilitariaUnitTests {
     }
 
     @Test
-    void nullEmail_passesValidation() {
-        // @Email annotation allows empty/null values by default
+    void validateEmail_ShouldPassWhenEmailIsNull() {
         AppUser user = new AppUser();
         user.setFirstName("John");
         user.setLastName("Doe");

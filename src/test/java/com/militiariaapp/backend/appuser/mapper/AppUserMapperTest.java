@@ -19,7 +19,7 @@ class AppUserMapperTest extends MilitariaUnitTests {
     }
 
     @Test
-    void toSummaryView_mapsAllFields() {
+    void toSummaryView_ShouldMapAllFieldsWhenEntityIsValid() {
         AppUser appUser = new AppUser();
         appUser.setFirstName("John");
         appUser.setLastName("Doe");
@@ -34,7 +34,7 @@ class AppUserMapperTest extends MilitariaUnitTests {
     }
 
     @Test
-    void toEntity_mapsAllFields() {
+    void toEntity_ShouldMapAllFieldsWhenViewIsValid() {
         AppUserSummaryView view = new AppUserSummaryView();
         view.setFirstName("Jane");
         view.setLastName("Smith");
@@ -50,7 +50,7 @@ class AppUserMapperTest extends MilitariaUnitTests {
     }
 
     @Test
-    void nullInputs_returnNull() {
+    void mapping_ShouldReturnNullWhenInputsAreNull() {
         assertNull(mapper.toSummaryView(null));
         assertNull(mapper.toEntity(null));
     }

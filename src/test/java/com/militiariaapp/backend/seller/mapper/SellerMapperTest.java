@@ -19,7 +19,7 @@ class SellerMapperTest extends MilitariaUnitTests {
     }
 
     @Test
-    void toSummaryView_mapsAllFields() {
+    void toSummaryView_ShouldMapAllFieldsWhenEntityIsValid() {
         Seller seller = new Seller();
         seller.setCompanyName("Test Company");
         seller.setPhoneNumber("1234567890");
@@ -32,7 +32,7 @@ class SellerMapperTest extends MilitariaUnitTests {
     }
 
     @Test
-    void toEntity_mapsAllFields() {
+    void toEntity_ShouldMapAllFieldsWhenViewIsValid() {
         SellerSummaryView view = new SellerSummaryView();
         view.setCompanyName("Another Company");
         view.setPhoneNumber("9876543210");
@@ -46,7 +46,7 @@ class SellerMapperTest extends MilitariaUnitTests {
     }
 
     @Test
-    void nullInputs_returnNull() {
+    void mapping_ShouldReturnNullWhenInputsAreNull() {
         assertNull(mapper.toSummaryView(null));
         assertNull(mapper.toEntity(null));
     }

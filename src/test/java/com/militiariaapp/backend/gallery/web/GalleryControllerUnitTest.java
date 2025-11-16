@@ -25,7 +25,7 @@ class GalleryControllerUnitTest extends MilitariaUnitTests {
     private GalleryController controller;
 
     @Test
-    void getGallery_galleryExists_returnsOk() {
+    void getGallery_ShouldReturnOkWhenGalleryExists() {
         UUID id = UUID.randomUUID();
         GallerySummaryView view = new GallerySummaryView();
         view.setName("Test Gallery");
@@ -43,7 +43,7 @@ class GalleryControllerUnitTest extends MilitariaUnitTests {
     }
 
     @Test
-    void getGallery_galleryNotFound_throwsResourceNotFoundException() {
+    void getGallery_ShouldThrowResourceNotFoundExceptionWhenGalleryNotFound() {
         UUID id = UUID.randomUUID();
 
         when(galleryService.getGallery(any(UUID.class))).thenReturn(null);
