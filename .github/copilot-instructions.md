@@ -3,6 +3,15 @@
 This file contains concise, practical instructions for AI assistants and contributors working on this repository. Follow
 these rules to produce safe, high-quality, and buildable changes.
 
+Application Purpose
+
+- MilitiariaApp Backend: A Java-based backend service for managing a collection of militaria items, including user
+  authentication, item cataloging, and gallery management.
+
+Tech Stack
+
+- Java 21, Maven, Spring Boot, JPA/Hibernate, JUnit 5, Mockito, MapStruct.
+
 Purpose
 
 - Help contributors and automated agents make small-to-medium code changes, add tests, and fix bugs without breaking the
@@ -47,6 +56,7 @@ Editing and coding conventions
 - When trying to fetch the first element in a list, prefer using 'getFirst()' instead of 'get(0)'.
 - Avoid adding comments in the code unless asked; prefer self-explanatory code.
 - Write clean, readable code; prefer meaningful variable/method names over comments.
+- In a Service class, always name the variable "repository" when referring to the corresponding Repository.
 
 Testing guidance
 
@@ -54,6 +64,9 @@ Testing guidance
 - Use Mockito for mocking repositories and other dependencies, and prefer `ArgumentCaptor` to assert saved entities.
 - After adding tests, run the tests locally using `./mvnw -Dtest=... test`.
 - If adding long-running integration tests, tag them separately so they can be excluded from quick runs.
+- Avoid adding comments in tests unless necessary; prefer clear test method names and structure.
+- Avoid using @DisplayName in tests; prefer descriptive method names instead.
+- Use method names like "<TestedMethodName>_Should<ExpectedBehavior>When<Condition>" for test methods.
 
 Safety and secrets
 
