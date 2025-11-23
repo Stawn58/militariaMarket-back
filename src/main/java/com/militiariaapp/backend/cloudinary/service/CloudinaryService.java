@@ -3,7 +3,6 @@ package com.militiariaapp.backend.cloudinary.service;
 import com.cloudinary.Cloudinary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 @Component
-@RequestScope
 @RequiredArgsConstructor
 public class CloudinaryService {
 

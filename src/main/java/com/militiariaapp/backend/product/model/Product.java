@@ -18,6 +18,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;
-    @OneToMany
+    @OneToMany(mappedBy = "product")
     private List<ProductImage> images;
 }

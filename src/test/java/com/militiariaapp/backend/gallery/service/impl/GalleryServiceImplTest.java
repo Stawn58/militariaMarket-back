@@ -1,17 +1,27 @@
 package com.militiariaapp.backend.gallery.service.impl;
 
 import com.militiariaapp.backend.MilitariaUnitTests;
+import com.militiariaapp.backend.cloudinary.service.CloudinaryService;
 import com.militiariaapp.backend.gallery.model.Gallery;
 import com.militiariaapp.backend.gallery.model.view.GalleryCreationView;
 import com.militiariaapp.backend.gallery.model.view.GallerySummaryView;
 import com.militiariaapp.backend.gallery.service.repository.GalleryRepository;
+import com.militiariaapp.backend.product.model.Product;
+import com.militiariaapp.backend.product.model.ProductCreationView;
+import com.militiariaapp.backend.product.model.ProductImage;
+import com.militiariaapp.backend.product.service.repository.ProductImageRepository;
+import com.militiariaapp.backend.product.service.repository.ProductRepository;
 import com.militiariaapp.backend.seller.model.Seller;
 import com.militiariaapp.backend.seller.service.repository.SellerRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +35,13 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
     private GalleryRepository repository;
     @Mock
     private SellerRepository sellerRepository;
+
+    @Mock
+    private ProductRepository productRepository;
+    @Mock
+    private ProductImageRepository productImageRepository;
+    @Mock
+    private CloudinaryService cloudinaryService;
 
     @InjectMocks
     private GalleryServiceImpl service;
@@ -201,5 +218,69 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
         assertNotNull(result);
         assertNull(result.getName());
         assertNull(result.getDescription());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void addProduct_ShouldSaveProductAndImagesWhenGalleryExists() throws IOException {
+        var sellerId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(UUID.randomUUID());
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var file1 = mock(MultipartFile.class);
+        var file2 = mock(MultipartFile.class);
+
+        var view = new ProductCreationView();
+        view.setName("Prod");
+        view.setDescription("Desc");
+        view.setPrice(12.5);
+        view.setImages(List.of(file1, file2));
+
+        when(cloudinaryService.uploadImage(file1)).thenReturn("http://img1");
+        when(cloudinaryService.uploadImage(file2)).thenReturn("http://img2");
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        service.addProduct(sellerId, view);
+
+        var productCaptor = ArgumentCaptor.forClass(Product.class);
+        verify(productRepository, times(1)).save(productCaptor.capture());
+        Product savedProduct = productCaptor.getValue();
+        assertEquals("Prod", savedProduct.getName());
+        assertEquals("Desc", savedProduct.getDescription());
+        assertEquals(12.5, savedProduct.getPrice());
+
+        var imagesCaptor = ArgumentCaptor.forClass(Iterable.class);
+        verify(productImageRepository, times(1)).saveAll(imagesCaptor.capture());
+        @SuppressWarnings("unchecked")
+        Iterable<ProductImage> savedImages = (Iterable<ProductImage>) imagesCaptor.getValue();
+        List<ProductImage> imgList = new ArrayList<>();
+        savedImages.forEach(imgList::add);
+
+        assertEquals(2, imgList.size());
+        assertEquals("http://img1", imgList.getFirst().getImageUrl());
+        assertEquals(savedProduct, imgList.getFirst().getProduct());
+        assertEquals("http://img2", imgList.get(1).getImageUrl());
+        assertEquals(savedProduct, imgList.get(1).getProduct());
+
+        verify(cloudinaryService, times(1)).uploadImage(file1);
+        verify(cloudinaryService, times(1)).uploadImage(file2);
+    }
+
+    @Test
+    void addProduct_ShouldThrowIllegalArgumentWhenGalleryNotFound() throws IOException {
+        var sellerId = UUID.randomUUID();
+        when(repository.findBySellerId(sellerId)).thenReturn(null);
+
+        var view = new ProductCreationView();
+        view.setImages(List.of());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.addProduct(sellerId, view));
+        assertTrue(ex.getMessage().contains("Gallery not found"));
+
+        verify(productRepository, never()).save(any());
+        verify(productImageRepository, never()).saveAll(any());
+        verify(cloudinaryService, never()).uploadImage(any());
     }
 }

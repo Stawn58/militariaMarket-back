@@ -64,8 +64,9 @@ Testing guidance
 - Use Mockito for mocking repositories and other dependencies, and prefer `ArgumentCaptor` to assert saved entities.
 - After adding tests, run the tests locally using `./mvnw -Dtest=... test`.
 - If adding long-running integration tests, tag them separately so they can be excluded from quick runs.
-- Avoid adding comments in tests unless necessary; prefer clear test method names and structure.
+- Avoid adding comments in tests; prefer self-explanatory test method names.
 - Avoid using @DisplayName in tests; prefer descriptive method names instead.
+- Avoid using @MockBean as it is deprecated; use Mockito's @Mock and @InjectMocks instead.
 - Use method names like "<TestedMethodName>_Should<ExpectedBehavior>When<Condition>" for test methods.
 
 Safety and secrets

@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -33,12 +31,8 @@ public class GalleryController {
     }
 
     @PostMapping(path = "/{sellerId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> saveProductGallery(@PathVariable UUID sellerId, @RequestPart("products") ProductCreationView product,
-                                                   @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-
-        product.setImages(images);
-        galleryService.addProduct(sellerId, product);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UUID> saveProductGallery(@PathVariable UUID sellerId, @ModelAttribute ProductCreationView product) {
+        return ResponseEntity.ok(galleryService.addProduct(sellerId, product));
     }
 
     @PostMapping("/{id}")

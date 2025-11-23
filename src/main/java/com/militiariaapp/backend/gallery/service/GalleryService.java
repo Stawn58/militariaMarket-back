@@ -12,5 +12,5 @@ public interface GalleryService {
 
     GallerySummaryView getGallery(UUID id);
 
-    void addProduct(UUID sellerId, ProductCreationView productCreationView);
+    UUID addProduct(UUID sellerId, ProductCreationView productCreationView);
 }

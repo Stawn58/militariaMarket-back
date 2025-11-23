@@ -11,6 +11,8 @@ import com.militiariaapp.backend.product.mapper.ProductMapper;
 import com.militiariaapp.backend.product.model.Product;
 import com.militiariaapp.backend.product.model.ProductCreationView;
 import com.militiariaapp.backend.product.model.ProductImage;
+import com.militiariaapp.backend.product.service.repository.ProductImageRepository;
+import com.militiariaapp.backend.product.service.repository.ProductRepository;
 import com.militiariaapp.backend.seller.model.Seller;
 import com.militiariaapp.backend.seller.service.repository.SellerRepository;
 import jakarta.transaction.Transactional;
@@ -31,6 +33,8 @@ public class GalleryServiceImpl implements GalleryService {
     private final GalleryRepository repository;
     private final SellerRepository sellerRepository;
     private final CloudinaryService cloudinaryService;
+    private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Override
     @Transactional
@@ -47,18 +51,31 @@ public class GalleryServiceImpl implements GalleryService {
     }
 
     @Override
-    public void addProduct(UUID sellerId, ProductCreationView productCreationView) {
+    @Transactional
+    public UUID addProduct(UUID sellerId, ProductCreationView productCreationView) {
         var gallery = repository.findBySellerId(sellerId);
         if (gallery != null) {
             var productMapper = Mappers.getMapper(ProductMapper.class);
-            var product = productMapper.asProduct(productCreationView);
 
+            var product = productMapper.asProduct(productCreationView);
+            product.setGallery(gallery);
+
+            var savedProduct = productRepository.save(product);
+
+            var images = productCreationView.getImages();
+            var productImages = asProductImages(savedProduct, images);
+
+            productImageRepository.saveAll(productImages);
+
+            return gallery.getId();
         }
+
+        throw new IllegalArgumentException("Gallery not found for seller: " + sellerId);
     }
 
-    private void createProductImages(Product product, List<MultipartFile> images) {
+    private List<ProductImage> asProductImages(Product product, List<MultipartFile> images) {
+        var productImages = new ArrayList<ProductImage>();
         if (!images.isEmpty()) {
-            var productImages = new ArrayList<>();
             images.forEach(multipartFile -> {
                 try {
                     var imageUrl = cloudinaryService.uploadImage(multipartFile);
@@ -67,11 +84,8 @@ public class GalleryServiceImpl implements GalleryService {
                     throw new RuntimeException(e);
                 }
             });
-            // TODO Create product repository
-            // Save product
-            // Create product image repository
-            // Save product images
         }
+        return productImages;
     }
 
     private ProductImage asProductImage(Product product, String imageUrl) {
