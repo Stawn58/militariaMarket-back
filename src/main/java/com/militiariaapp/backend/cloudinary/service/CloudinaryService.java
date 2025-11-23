@@ -27,6 +27,11 @@ public class CloudinaryService {
         return cloudinary.url().generate(fileName);
     }
 
+    public void getImage(String publicId) throws Exception {
+        var apiResponse = cloudinary.api().resource(publicId, Map.of());
+        System.out.println(apiResponse);
+    }
+
     public boolean isAllowedFormat(String fileName) {
         var matcher = Pattern.compile(ALLOWED_FORMAT, Pattern.CASE_INSENSITIVE).matcher(fileName);
 

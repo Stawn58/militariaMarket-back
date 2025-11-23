@@ -1,6 +1,7 @@
 package com.militiariaapp.backend.seller.web;
 
 import com.militiariaapp.backend.MilitariaUnitTests;
+import com.militiariaapp.backend.seller.model.view.SellerCreationView;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import com.militiariaapp.backend.seller.service.SellerService;
 import org.junit.jupiter.api.Test;
@@ -56,11 +57,11 @@ class SellerControllerUnitTest extends MilitariaUnitTests {
 
     @Test
     void saveSeller_ShouldReturnOkWhenInputIsValid() {
-        SellerSummaryView view = new SellerSummaryView();
+        var view = new SellerCreationView();
         view.setCompanyName("New Company");
         view.setPhoneNumber("5555555555");
 
-        doNothing().when(sellerService).saveSeller(any(SellerSummaryView.class));
+        doNothing().when(sellerService).saveSeller(any(SellerCreationView.class));
 
         ResponseEntity<Void> response = controller.saveSeller(view);
 

@@ -1,5 +1,6 @@
 package com.militiariaapp.backend.seller.web;
 
+import com.militiariaapp.backend.seller.model.view.SellerCreationView;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import com.militiariaapp.backend.seller.service.SellerService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,10 @@ public class SellerController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> saveSeller(@RequestBody SellerSummaryView sellerSummaryView) {
-        sellerService.saveSeller(sellerSummaryView);
+    public ResponseEntity<Void> saveSeller(@RequestBody SellerCreationView sellerCreationView) {
+        sellerService.saveSeller(sellerCreationView);
 
+        // maybe return a "created" response with the location of the new resource (seller)
         return ResponseEntity.ok().build();
     }
 }

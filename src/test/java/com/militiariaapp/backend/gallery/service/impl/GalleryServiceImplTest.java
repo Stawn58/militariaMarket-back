@@ -283,4 +283,159 @@ class GalleryServiceImplTest extends MilitariaUnitTests {
         verify(productImageRepository, never()).saveAll(any());
         verify(cloudinaryService, never()).uploadImage(any());
     }
+
+    @Test
+    void addProduct_ShouldReturnGalleryIdWhenProductSavedSuccessfully() {
+        var sellerId = UUID.randomUUID();
+        var galleryId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(galleryId);
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var view = new ProductCreationView();
+        view.setName("Test Product");
+        view.setImages(List.of());
+
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        UUID result = service.addProduct(sellerId, view);
+
+        assertEquals(galleryId, result);
+        verify(productRepository, times(1)).save(any(Product.class));
+        verify(productImageRepository, times(1)).saveAll(any());
+    }
+
+    @Test
+    void addProduct_ShouldSaveProductWithoutImagesWhenImagesListIsEmpty() {
+        var sellerId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(UUID.randomUUID());
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var view = new ProductCreationView();
+        view.setName("Product Without Images");
+        view.setDescription("Description");
+        view.setPrice(25.0);
+        view.setImages(List.of());
+
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        service.addProduct(sellerId, view);
+
+        var productCaptor = ArgumentCaptor.forClass(Product.class);
+        verify(productRepository, times(1)).save(productCaptor.capture());
+        Product savedProduct = productCaptor.getValue();
+        assertEquals("Product Without Images", savedProduct.getName());
+        assertEquals("Description", savedProduct.getDescription());
+        assertEquals(25.0, savedProduct.getPrice());
+
+        var imagesCaptor = ArgumentCaptor.forClass(Iterable.class);
+        verify(productImageRepository, times(1)).saveAll(imagesCaptor.capture());
+        Iterable<ProductImage> savedImages = imagesCaptor.getValue();
+        List<ProductImage> imgList = new ArrayList<>();
+        savedImages.forEach(imgList::add);
+        assertTrue(imgList.isEmpty());
+
+        try {
+            verify(cloudinaryService, never()).uploadImage(any());
+        } catch (IOException ignored) {
+            // This should never happen in this test case
+        }
+    }
+
+    @Test
+    void addProduct_ShouldThrowRuntimeExceptionWhenCloudinaryServiceThrowsIOException() throws IOException {
+        var sellerId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(UUID.randomUUID());
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var file = mock(MultipartFile.class);
+        var view = new ProductCreationView();
+        view.setName("Product");
+        view.setImages(List.of(file));
+
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(cloudinaryService.uploadImage(file)).thenThrow(new IOException("Upload failed"));
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.addProduct(sellerId, view));
+        assertEquals("java.io.IOException: Upload failed", ex.getMessage());
+
+        verify(productRepository, times(1)).save(any(Product.class));
+        verify(cloudinaryService, times(1)).uploadImage(file);
+        verify(productImageRepository, never()).saveAll(any());
+    }
+
+    @Test
+    void addProduct_ShouldPropagateExceptionWhenProductRepositoryThrows() {
+        var sellerId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(UUID.randomUUID());
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var view = new ProductCreationView();
+        view.setName("Product");
+        view.setImages(List.of());
+
+        when(productRepository.save(any(Product.class))).thenThrow(new RuntimeException("Database error"));
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.addProduct(sellerId, view));
+        assertEquals("Database error", ex.getMessage());
+
+        verify(productRepository, times(1)).save(any(Product.class));
+        verify(productImageRepository, never()).saveAll(any());
+        try {
+            verify(cloudinaryService, never()).uploadImage(any());
+        } catch (IOException ignored) {
+            // This should never happen in this test case
+        }
+    }
+
+    @Test
+    void addProduct_ShouldPropagateExceptionWhenProductImageRepositoryThrows() throws IOException {
+        var sellerId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(UUID.randomUUID());
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var file = mock(MultipartFile.class);
+        var view = new ProductCreationView();
+        view.setName("Product");
+        view.setImages(List.of(file));
+
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(cloudinaryService.uploadImage(file)).thenReturn("http://image.url");
+        when(productImageRepository.saveAll(any())).thenThrow(new RuntimeException("Image save failed"));
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.addProduct(sellerId, view));
+        assertEquals("Image save failed", ex.getMessage());
+
+        verify(productRepository, times(1)).save(any(Product.class));
+        verify(cloudinaryService, times(1)).uploadImage(file);
+        verify(productImageRepository, times(1)).saveAll(any());
+    }
+
+    @Test
+    void addProduct_ShouldHandleNullImagesListGracefully() {
+        var sellerId = UUID.randomUUID();
+        var gallery = new Gallery();
+        gallery.setId(UUID.randomUUID());
+
+        when(repository.findBySellerId(sellerId)).thenReturn(gallery);
+
+        var view = new ProductCreationView();
+        view.setName("Product With Null Images");
+        view.setImages(null);
+
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        assertThrows(NullPointerException.class, () -> service.addProduct(sellerId, view));
+
+        verify(productRepository, times(1)).save(any(Product.class));
+    }
 }

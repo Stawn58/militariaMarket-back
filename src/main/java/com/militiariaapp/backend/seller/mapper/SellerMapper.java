@@ -1,6 +1,7 @@
 package com.militiariaapp.backend.seller.mapper;
 
 import com.militiariaapp.backend.seller.model.Seller;
+import com.militiariaapp.backend.seller.model.view.SellerCreationView;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,5 +12,6 @@ public interface SellerMapper {
     SellerSummaryView toSummaryView(Seller seller);
 
     @Mapping(target = "id", ignore = true)
-    Seller toEntity(SellerSummaryView sellerSummaryView);
+    @Mapping(target = "appUser", ignore = true)
+    Seller toEntity(SellerCreationView sellerCreationView);
 }

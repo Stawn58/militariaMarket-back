@@ -1,7 +1,10 @@
 package com.militiariaapp.backend.seller.service.impl;
 
 import com.militiariaapp.backend.MilitariaUnitTests;
+import com.militiariaapp.backend.appuser.model.AppUser;
+import com.militiariaapp.backend.appuser.service.AppUserRepository;
 import com.militiariaapp.backend.seller.model.Seller;
+import com.militiariaapp.backend.seller.model.view.SellerCreationView;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import com.militiariaapp.backend.seller.service.repository.SellerRepository;
 import org.junit.jupiter.api.Test;
@@ -21,15 +24,20 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
     @Mock
     private SellerRepository repository;
 
+    @Mock
+    private AppUserRepository appUserRepository;
+
     @InjectMocks
     private SellerServiceImpl service;
 
     @Test
     void saveSeller_ShouldSaveSellerWhenViewIsValid() {
-        var view = new SellerSummaryView();
+        var view = new SellerCreationView();
         view.setCompanyName("Test Company");
         view.setPhoneNumber("1234567890");
+        view.setUser(UUID.randomUUID());
 
+        when(appUserRepository.findById(any(UUID.class))).thenReturn(Optional.of(mock(AppUser.class)));
         when(repository.save(any(Seller.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         service.saveSeller(view);
@@ -39,15 +47,6 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
         Seller saved = captor.getValue();
         assertEquals("Test Company", saved.getCompanyName());
         assertEquals("1234567890", saved.getPhoneNumber());
-    }
-
-    @Test
-    void saveSeller_ShouldCallRepositoryWithNullWhenViewIsNull() {
-        when(repository.save(null)).thenReturn(null);
-
-        service.saveSeller(null);
-
-        verify(repository, times(1)).save(null);
     }
 
     @Test
@@ -74,9 +73,8 @@ class SellerServiceImplUnitTest extends MilitariaUnitTests {
 
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        SellerSummaryView result = service.getSellerById(id);
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.getSellerById(id));
+        assertTrue(ex.getMessage().contains("Seller not found"));
 
-        assertNull(result);
-        verify(repository, times(1)).findById(id);
     }
 }

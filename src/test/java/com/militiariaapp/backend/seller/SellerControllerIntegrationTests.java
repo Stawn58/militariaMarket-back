@@ -27,13 +27,13 @@ public class SellerControllerIntegrationTests extends MilitariaIntegrationTests 
     }
 
     @Test
-    void getSeller_ShouldReturnOkWithNullBodyWhenSellerNotFound() throws Exception {
+    void getSeller_ShouldReturnBadRequestWhenSellerNotFound() throws Exception {
         var id = UUID.randomUUID();
         var uriTemplate = "/sellers/" + id;
 
         mvc.perform(MockMvcRequestBuilders.get(uriTemplate))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -41,7 +41,8 @@ public class SellerControllerIntegrationTests extends MilitariaIntegrationTests 
         String sellerJson = """
                 {
                     "companyName": "New Seller Company",
-                    "phoneNumber": "5555555555"
+                    "phoneNumber": "5555555555",
+                    "user": "2d633577-52ee-43f5-ab31-f39de2dd5e64"
                 }
                 """;
 

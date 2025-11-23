@@ -2,6 +2,7 @@ package com.militiariaapp.backend.seller.mapper;
 
 import com.militiariaapp.backend.MilitariaUnitTests;
 import com.militiariaapp.backend.seller.model.Seller;
+import com.militiariaapp.backend.seller.model.view.SellerCreationView;
 import com.militiariaapp.backend.seller.model.view.SellerSummaryView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class SellerMapperTest extends MilitariaUnitTests {
 
     @Test
     void toEntity_ShouldMapAllFieldsWhenViewIsValid() {
-        SellerSummaryView view = new SellerSummaryView();
+        var view = new SellerCreationView();
         view.setCompanyName("Another Company");
         view.setPhoneNumber("9876543210");
 
