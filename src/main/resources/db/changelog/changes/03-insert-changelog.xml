@@ -1,0 +1,47 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet id="23112025" author="Stawn">
+        <insert tableName="app_user">
+            <column name="id" value="7a8ee7fe-c8a5-11f0-bb4a-f762a9da00ae"/>
+            <column name="first_name" value="Joseph"/>
+            <column name="last_name" value="Joestar"/>
+            <column name="email" value="joseph.joestart@ok.com"/>
+        </insert>
+        <insert tableName="seller">
+            <column name="id" value="842df0fc-c8a5-11f0-8d6a-334645d7176f"/>
+            <column name="company_name" value="Joestar Emporium"/>
+            <column name="phone_number" value="+1234567890"/>
+            <column name="app_user_id" value="7a8ee7fe-c8a5-11f0-bb4a-f762a9da00ae"/>
+        </insert>
+        <insert tableName="gallery">
+            <column name="id" value="b82d5c30-c8a5-11f0-a5c0-cbb7a93fb7d5"/>
+            <column name="name" value="Modern Art Gallery"/>
+            <column name="description" value="A collection of modern art pieces."/>
+            <column name="seller_id" value="842df0fc-c8a5-11f0-8d6a-334645d7176f"/>
+        </insert>
+        <insert tableName="product">
+            <column name="id" value="b207dc1c-c8a6-11f0-ad0b-4b50e744e17e"/>
+            <column name="name" value="Abstract Painting"/>
+            <column name="description" value="A beautiful abstract painting."/>
+            <column name="price" value="1500.00"/>
+            <column name="gallery_id" value="b82d5c30-c8a5-11f0-a5c0-cbb7a93fb7d5"/>
+        </insert>
+
+        <insert tableName="product_image">
+            <column name="id" value="0797e528-c8a7-11f0-8847-af6075c7a613"/>
+            <column name="image_url" value="http://example.com/images/abstract_painting.jpg"/>
+            <column name="product_id" value="b207dc1c-c8a6-11f0-ad0b-4b50e744e17e"/>
+        </insert>
+
+        <insert tableName="product_image">
+            <column name="id" value="226bfd08-c8a7-11f0-90f6-276c6d5eb1b4"/>
+            <column name="image_url" value="http://example.com/images/abstract_painting2.jpg"/>
+            <column name="product_id" value="b207dc1c-c8a6-11f0-ad0b-4b50e744e17e"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
